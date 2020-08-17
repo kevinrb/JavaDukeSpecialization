@@ -10,16 +10,148 @@ import java.io.*;
 
 public class TagFinder {
     
-    public void printAllGenes(String dna){
-        
-        String temp = findGene(dna);
-        System.out.println(temp);
-        while(temp != ""){
+    public StorageResource getAllGenes(String dna){
+        String temp = "";
+        StorageResource sr = new StorageResource();
+        do {
+            temp = findGene(dna);
             int newposition = dna.indexOf(temp) + temp.length();
             dna = dna.substring(newposition);
-            temp = findGene(dna);
-            System.out.println(temp);
+            if(temp!=""){
+                sr.add(temp);
+            }
+        }while(temp != "");
+        return sr;
+    }
+
+    public float cgRatio(String dna){
+        dna = dna.toLowerCase();
+        
+        int Camt=0;
+        int currIndexC= dna.indexOf("c");
+        while(true) {
+                    if (currIndexC==-1)
+                    {break;}
+                    Camt= Camt+1;
+                    currIndexC= dna.indexOf("c",currIndexC+1);
         }
+         int currIndexG= dna.indexOf("g");
+        while(true) {
+                    if (currIndexG==-1)
+                    {break;}
+                    Camt= Camt+1;
+                    currIndexG= dna.indexOf("g",currIndexG+1);
+        }
+        
+        float total = dna.length();
+        float div= Camt/total;
+        return div;
+    
+    
+    }
+    public int cgrmas035(String dna){
+        dna = dna.toLowerCase();
+        String temp = "";
+        int count = 0;
+        //System.out.println(temp);
+        do{
+            temp = findGene(dna);
+            int newposition = dna.indexOf(temp) + temp.length();
+            dna = dna.substring(newposition);
+            if(cgRatio(temp)>0.35){
+                count += 1;
+            }
+            //System.out.println(temp +"-----"+count);
+        }while(temp != "");
+        return count;
+    
+    }
+    
+    public int countCTG(String dna){
+        dna = dna.toLowerCase();
+        int Css=dna.split("ctg").length-1;
+        return Css;
+    
+    }
+    
+    public int countGenes(String dna){
+        dna = dna.toLowerCase();
+        String temp = "";
+        int count = -1;
+        //System.out.println(temp);
+        do{
+            temp = findGene(dna);
+            int newposition = dna.indexOf(temp) + temp.length();
+            dna = dna.substring(newposition);
+            
+                count += 1;
+           // System.out.println(temp+"--+"+dna.length());
+            //System.out.println(temp +"-----"+count);
+        }while(temp != "");
+        return count;
+    
+    }
+    
+    public int maxGen(String dna){
+        dna = dna.toLowerCase();
+        String temp = "";
+        int max = 0;
+        //System.out.println(temp);
+        do{
+            temp = findGene(dna);
+            int newposition = dna.indexOf(temp) + temp.length();
+            dna = dna.substring(newposition);
+            
+            if(temp.length()>max){
+                max = temp.length();
+            }
+            
+            //System.out.println(temp +"-----"+count);
+        }while(temp != "");
+        return max;
+    
+    }
+    
+    public int genmas60(String dna){
+        dna = dna.toLowerCase();
+        String temp = "";
+        int count = 0;
+        //System.out.println(temp);
+        do{
+            temp = findGene(dna);
+            int newposition = dna.indexOf(temp) + temp.length();
+            dna = dna.substring(newposition);
+            if(temp.length()>60){
+                count += 1;
+            }
+            //System.out.println(temp +"-----"+count);
+        }while(temp != "");
+        return count;
+    
+    }
+    
+    public int howMany(String stringa,String stringb){
+        int position = stringb.indexOf(stringa);
+        int count = -1;
+        while(position != -1){
+            int newpos = position + stringa.length();
+            stringb = stringb.substring(newpos);
+            count += 1;
+            position = stringb.indexOf(stringa);
+        }
+        return count;
+    }
+    
+    public void printAllGenes(String dna){
+        dna = dna.toLowerCase();
+        String temp = "";
+        do {
+            temp = findGene(dna);
+            int newposition = dna.indexOf(temp) + temp.length();
+            dna = dna.substring(newposition);
+
+            
+        }while(temp != "");
     
     
     }
@@ -48,15 +180,15 @@ public class TagFinder {
         if (start == -1){}
         else
         {
-            int postaa = findStopCodon(dna,start,"TAA")+3;
-            int postag = findStopCodon(dna,start,"TAG")+3;
-            int postga = findStopCodon(dna,start,"TGA")+3;
+            int postaa = findStopCodon(dna,start,"TAA");
+            int postag = findStopCodon(dna,start,"TAG");
+            int postga = findStopCodon(dna,start,"TGA");
             int minpos =Math.min(Math.min(postaa,postag),postga);
             if(minpos==dna.length()){
             
             }
             else{
-                Gene =  dna.substring(start, minpos);
+                Gene =  dna.substring(start, minpos+3);
             }
         }
         return Gene;
@@ -112,9 +244,20 @@ public class TagFinder {
             int d = findStopCodon(s,start,"TAA");
             int dg = findStopCodon(s,start,"TAG");
             int da = findStopCodon(s,start,"TGA");
-            System.out.println("found " + result + " codon:"+
-            d + " codon2:" + dg+ " codon3:"+ da);
+            //System.out.println("found " + result + " codon:"+
+            //d + " codon2:" + dg+ " codon3:"+ da);
             printAllGenes(s);
+            int c = countGenes(s);
+            System.out.println(c);
+            int cc = genmas60(s);
+            System.out.println(cc);
+            float dd = cgrmas035(s);
+            System.out.println(dd);          
+            int pp = countCTG(s);
+            System.out.println(pp);
+            int mm = maxGen(s);
+            System.out.println(mm);
+            
         }
     }
 }
