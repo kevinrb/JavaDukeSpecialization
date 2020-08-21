@@ -1,3 +1,8 @@
+/**
+ *
+ * @author Kevin Rojas B
+ */
+
 import edu.duke.*;
 import java.io.File;
 
